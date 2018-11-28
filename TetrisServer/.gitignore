@@ -2,3 +2,8 @@
 /ServerGUI.class
 /Database.class
 /EventHandler.class
+/PlayerInformationPanel.class
+/ServerInformationPanel.class
+/GameControl.class
+/ServerGameControl.class
+/ServerGamePanel.class
