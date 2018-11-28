@@ -37,7 +37,7 @@ public class Server extends AbstractServer
        LoginData loginData = (LoginData)arg0;
        try
 			{
-				ArrayList<String> result = database.query("Select username, password from UserData");
+				ArrayList<String> result = database.query("Select username, aes_decrypt(password, 'key') from UserData where UserData.username = '" + loginData.getUsername() + "'");
 				if(result != null)
 				{
 					boolean correct = false;
@@ -87,7 +87,7 @@ public class Server extends AbstractServer
       CreateAccountData loginData = (CreateAccountData)arg0;
       try
 			{
-				ArrayList<String> result = database.query("Select username, password from UserData");
+				ArrayList<String> result = database.query("Select username, aes_decrypt(password, 'key') from UserData where UserData.username = '" + loginData.getUsername() + "'");
 				if(result != null)
 				{
 					boolean correct = false;
@@ -118,7 +118,7 @@ public class Server extends AbstractServer
 							log.append(e.toString());
 						}
 						database.executeDML("Insert into UserData "
-								+ "values('" + loginData.getUsername() + "', '" + loginData.getPassword() + "')");
+								+ "values('" + loginData.getUsername() + "', " + "aes_encrypt('" + loginData.getPassword() + "', 'key'))");
 					}
 				}
 				else
