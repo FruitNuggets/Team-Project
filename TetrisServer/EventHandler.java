@@ -55,6 +55,14 @@ public void actionPerformed(ActionEvent event)
   	gui2.dispose();
   	System.exit(0);
   }
+  else if(event.getActionCommand().equals("Server Information"))
+  {
+  	
+  }
+  else if(event.getActionCommand().equals("Player Information"))
+  {
+  	
+  }
   else
   	System.out.println("Error with button press");
   }

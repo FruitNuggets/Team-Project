@@ -28,15 +28,27 @@ private EventHandler event;
 private Database database;
 private Process pr;
 private Runtime rt;
+private JPanel container;
+private ServerInformationPanel serverPanel;
+private ServerInitialPanel initialPanel;
+private ServerGamePanel gamePanel;
+private PlayerInformationPanel infoPanel;
+private CardLayout cardLayout;
 
 
 public ServerGUI()
 {
 	this.server = new Server();
-  this.setTitle("Server");
+  this.setTitle("Tetris Server");
   this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
+  
+  // Create the card layout container.
+  cardLayout = new CardLayout();
+  container = new JPanel(cardLayout);
+  
+  // Create runtime variable to start the database
   rt = Runtime.getRuntime();
+  
   
   status = new JLabel("Status: ");
   connection = new JLabel("Not Connected");
@@ -90,13 +102,14 @@ public ServerGUI()
   south.add(quit);
   
   JPanel center = new JPanel();
-  center.setLayout(new GridLayout(2, 0, 0, 0));
   
   JPanel dPanel = new JPanel();
+  dPanel.setBounds(0, 220, 582, 220);
   FlowLayout flowLayout = (FlowLayout) dPanel.getLayout();
   flowLayout.setVgap(0);
   flowLayout.setHgap(0);
   JLabel dLabel = new JLabel("Server Log Below ");
+  dLabel.setBounds(0, 0, 582, 220);
   dLabel.setVerticalAlignment(SwingConstants.BOTTOM);
   dLabel.setHorizontalAlignment(SwingConstants.CENTER);
   log = new JTextArea();
@@ -106,6 +119,7 @@ public ServerGUI()
   //dScroll.getViewport().add(log, null);
   dScroll.setPreferredSize(new Dimension(525, 200));
   dPanel.add(dScroll, BorderLayout.SOUTH);
+  center.setLayout(null);
 
   
   center.add(dLabel);
@@ -116,10 +130,23 @@ public ServerGUI()
   getContentPane().add(center);
   
   server.setLog(log);
-  server.setStatus(connection);
   
+  JButton btnServerInformation = new JButton("Server Information");
+  btnServerInformation.setBounds(379, 95, 177, 25);
+  center.add(btnServerInformation);
+  btnServerInformation.addActionListener(event);
+  
+  JButton btnPlayerInformation = new JButton("Player Information");
+  btnPlayerInformation.setBounds(28, 95, 177, 25);
+  center.add(btnPlayerInformation);
+  btnPlayerInformation.addActionListener(event);
+  
+  server.setStatus(connection);
   this.setBounds(500, 500, 600, 600);
   this.setVisible(true);
+  
+  //initialize other panels
+  serverPanel = new ServerInformationPanel();
   
   //start database
   startDatabase();
@@ -242,10 +269,14 @@ public boolean checkLog()
 		return true;
 }
 
+public void showServerInformation()
+{
+	
+}
+
 public static void main(String[] args) {
   
 	new ServerGUI(); //args[0] represents the title of the GUI
 
 }
-
 }
