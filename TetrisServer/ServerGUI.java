@@ -280,7 +280,7 @@ public void showServerInformation() throws UnknownHostException
   //cardLayout.show(container, "2");
 	ServerInformation serverInfo = new ServerInformation(server);
 	log.setText("");
-	log.setText("Server IP: " + serverInfo.getServerIP() + "\nServer Name: " + serverInfo.getServerName() +  "\nServer Port: " + serverInfo.getPortNumber() + "\nServer Status: " + connection.getText());
+	log.setText("Server IP: " + serverInfo.getServerIP().toString() + "\nServer Name: " + serverInfo.getServerName() +  "\nServer Port: " + serverInfo.getPortNumber() + "\nServer Status: " + connection.getText());
 }
 
 public static void main(String[] args) {

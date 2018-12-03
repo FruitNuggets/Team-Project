@@ -1,7 +1,8 @@
 package TetrisServer;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
+import java.net.*;
+import java.util.ArrayList;
+import java.util.Enumeration;
 
 public class ServerInformation
 {
@@ -13,12 +14,32 @@ public class ServerInformation
 		this.server = server;
 	}
 	
-	public String getServerIP() throws UnknownHostException
+	public ArrayList<String> getServerIP() throws UnknownHostException
 	{
-		InetAddress address;
-		address = InetAddress.getLocalHost();
-		
-		return address.getHostAddress();
+		ArrayList<String>ip = new ArrayList<String>();
+		try {
+		    Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
+		    while (interfaces.hasMoreElements()) {
+		        NetworkInterface iface = interfaces.nextElement();
+		        // filters out 127.0.0.1 and inactive interfaces
+		        if (iface.isLoopback() || !iface.isUp())
+		            continue;
+
+		        Enumeration<InetAddress> addresses = iface.getInetAddresses();
+		        while(addresses.hasMoreElements()) {
+		            InetAddress addr = addresses.nextElement();
+
+		            // *EDIT*
+		            if (addr instanceof Inet6Address) continue;
+
+		            ip.add(addr.getHostAddress());
+		            System.out.println(iface.getDisplayName() + " " + ip);
+		        }
+		    }
+		} catch (SocketException e) {
+		    throw new RuntimeException(e);
+		}
+		return ip;
 	}
 	
 	public int getPortNumber()
