@@ -15,6 +15,7 @@ public class Server extends AbstractServer
   private JLabel status;
   private Database database;
   private int clients;
+  private ArrayList<String> currentClients;
   
 	public Server(int port)
 	{
@@ -27,6 +28,7 @@ public class Server extends AbstractServer
   {
     super(12345);
     clients = 0;
+    currentClients = new ArrayList<String>();
   }
 
 	@Override
@@ -49,8 +51,10 @@ public class Server extends AbstractServer
 							correct = true;
 							try
 							{
+								clients++;
 								arg1.sendToClient("correct login");
-					      log.append("Username/Password: " + loginData.getUsername() + " " + loginData.getPassword());
+					      log.append("\nUsername/Password: " + loginData.getUsername() + " " + loginData.getPassword());
+					      currentClients.add(loginData.getUsername() + ", " + clients);
 							} catch (IOException e)
 							{
 								// TODO Auto-generated catch block
@@ -133,7 +137,7 @@ public class Server extends AbstractServer
     }
 
     // TODO Auto-generated method stub
-    log.append("Message from Client" + arg0.toString() + arg1.toString() + "\n");
+    log.append("\nMessage from Client" + arg0.toString() + arg1.toString() + "\n");
 		
 	}
 	
@@ -209,14 +213,34 @@ public class Server extends AbstractServer
   	log.append("\nMax number of clients are connected.\n");
   }
   
-  protected void clientConnected(ConnectionToClient client) 
+  public ArrayList<String> getClients()
   {
-    log.append("\nClient Connected\n");
-    clients++;
-    if(clients > 1)
-    {
-    	serverFull();
-    }
+  	return currentClients;
   }
   
+  public String getClientWins(String username) throws SQLException
+  {
+  	String wins = null;
+  	
+  	ArrayList<String> result = database.query("Select username, wins from PlayerInformation where PlayerInformation.username = '" + username + "'");
+		if(result != null)
+		{
+			boolean correct = false;
+			for(String res : result)
+			{
+				String[] tokens = res.split(",");
+				if(username.equals(tokens[0].trim()))
+				{
+					wins = tokens[1].trim();
+				}
+			}
+		}
+		
+		if(wins == null)
+		{
+			wins = "0";
+		}
+  	
+  	return wins;
+  }
 }

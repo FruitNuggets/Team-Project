@@ -11,9 +11,11 @@ public class ClientGUI extends JFrame
   private InitialControl initialC;
   private LoginControl loginC;
   private CreateAccountControl accountC;
+  private ClientInitialGameControl initialGameC;
   private JPanel initialP;
   private JPanel loginP;
   private CreateAccountPanel accountP;
+  private ClientInitialGamePanel initialGameP;
   private JPanel container;
   private CardLayout cardLayout;
   // Constructor that creates the client GUI.
@@ -81,11 +83,14 @@ public class ClientGUI extends JFrame
   {
 	    loginC = new LoginControl(container, client); //Probably will want to pass in ChatClient here
 	    accountC = new CreateAccountControl(container, client);
-	    
+	    initialGameC = new ClientInitialGameControl(container, client);
 	    // Create the four views. (need the controller to register with the Panels
 	    loginP = new LoginPanel(loginC);
 	    accountP = new CreateAccountPanel(accountC);
+	    initialGameP = new ClientInitialGamePanel(initialGameC);
+	    
 	    container.add(loginP, "2");
 	    container.add(accountP, "3");
+	    container.add(initialGameP, "4");
   }
 }

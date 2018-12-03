@@ -12,9 +12,10 @@ public class Client extends AbstractClient
   	this.gui = gui;
   }
   
-  public Client(String host, int port)
+  public Client(String host, int port, ClientGUI gui)
   {
-	super(host, port); 
+	  super(host, port); 
+	  this.gui = gui;
   }
 
   @Override

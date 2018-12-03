@@ -9,3 +9,7 @@
 /LoginControl.class
 /CreateAccountControl.class
 /ClientGameControl.class
+/ClientInitialGamePanel.class
+/ClientInitialGameControl.class
+/ClientMultiplayerGamePanel.class
+/ClientMultiplayerGameControl.class

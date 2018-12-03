@@ -10,6 +10,8 @@ package TetrisServer;
 import java.awt.*;
 import java.io.IOException;
 import java.net.UnknownHostException;
+import java.sql.SQLException;
+import java.util.ArrayList;
 
 import javax.swing.*;
 
@@ -36,7 +38,6 @@ private Process pr;
 private Runtime rt;
 private JPanel container;
 private ServerGamePanel gamePanel;
-private PlayerInformationPanel infoPanel;
 private CardLayout cardLayout;
 
 
@@ -281,6 +282,26 @@ public void showServerInformation() throws UnknownHostException
 	ServerInformation serverInfo = new ServerInformation(server);
 	log.setText("");
 	log.setText("Server IP: " + serverInfo.getServerIP().toString() + "\nServer Name: " + serverInfo.getServerName() +  "\nServer Port: " + serverInfo.getPortNumber() + "\nServer Status: " + connection.getText());
+}
+
+public void showPlayerInformation()
+{
+	PlayerInformation infoPanel = new PlayerInformation(server);
+	log.setText("");
+	ArrayList<String> client = new ArrayList<String>();
+	try
+	{
+		client = infoPanel.getClientInfo();
+	} catch (SQLException e)
+	{
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+	for(String info : client)
+	{
+		log.append(info);
+		log.append("\n\n");
+	}
 }
 
 public static void main(String[] args) {

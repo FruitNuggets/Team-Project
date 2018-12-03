@@ -31,7 +31,7 @@ public class InitialControl implements ActionListener
     {
     	if (initialPanel.checkInfo())
     	{
-    	    client = new Client(initialPanel.getAddress(), initialPanel.getPort());
+    	    client = new Client(initialPanel.getAddress(), initialPanel.getPort(), clientGUI);
     	    try
     			{
     				client.openConnection();
@@ -57,10 +57,28 @@ public class InitialControl implements ActionListener
     // The Create button takes the user to the create account panel.
     else if (command.equals("Create"))
     {
-      CreateAccountPanel cPanel = (CreateAccountPanel)container.getComponent(2);
-      cPanel.setError("");
-      CardLayout cardLayout = (CardLayout)container.getLayout();
-      cardLayout.show(container, "3");
+    	if (initialPanel.checkInfo())
+    	{
+    	    client = new Client(initialPanel.getAddress(), initialPanel.getPort(), clientGUI);
+    	    try
+    			{
+    				client.openConnection();
+    			} catch (IOException e)
+    			{
+    				// TODO Auto-generated catch block
+    				System.out.println(e.toString());
+    			}
+    	    clientGUI.setClient(client);
+    	    clientGUI.addtoContainer();
+          CreateAccountPanel cPanel = (CreateAccountPanel)container.getComponent(2);
+          cPanel.setError("");
+          CardLayout cardLayout = (CardLayout)container.getLayout();
+          cardLayout.show(container, "3");
+    	}
+    	else
+    	{
+    		initialPanel.setError("Server Address/Port is empty");
+    	}
     }
   }
   

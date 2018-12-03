@@ -69,7 +69,7 @@ public void actionPerformed(ActionEvent event)
   }
   else if(event.getActionCommand().equals("Player Information"))
   {
-  	
+  	gui2.showPlayerInformation();
   }
   else
   	System.out.println("Error with button press");
