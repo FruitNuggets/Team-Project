@@ -5,3 +5,7 @@
 /ClientGamePanel.class
 /CreateAccountPanel.class
 /InitialPanel.class
+/InitialControl.class
+/LoginControl.class
+/CreateAccountControl.class
+/ClientGameControl.class

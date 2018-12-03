@@ -9,7 +9,13 @@ package TetrisServer;
  */
 import java.awt.*;
 import java.io.IOException;
+import java.net.UnknownHostException;
+
 import javax.swing.*;
+
+import TetrisClient.CreateAccountControl;
+import TetrisClient.CreateAccountPanel;
+import TetrisClient.LoginPanel;
 
 public class ServerGUI extends JFrame
 {
@@ -29,8 +35,6 @@ private Database database;
 private Process pr;
 private Runtime rt;
 private JPanel container;
-private ServerInformationPanel serverPanel;
-private ServerInitialPanel initialPanel;
 private ServerGamePanel gamePanel;
 private PlayerInformationPanel infoPanel;
 private CardLayout cardLayout;
@@ -145,9 +149,6 @@ public ServerGUI()
   this.setBounds(500, 500, 600, 600);
   this.setVisible(true);
   
-  //initialize other panels
-  serverPanel = new ServerInformationPanel();
-  
   //start database
   startDatabase();
   
@@ -168,6 +169,10 @@ public void startDatabase()
 	try
 	{
 		pr = rt.exec("C:\\xampp\\mysql_start.bat");
+		if(pr != null)
+		{
+			log.append("\nDatabase connected\n");
+		}
 	} catch (IOException e)
 	{
 		// TODO Auto-generated catch block
@@ -269,9 +274,13 @@ public boolean checkLog()
 		return true;
 }
 
-public void showServerInformation()
+public void showServerInformation() throws UnknownHostException
 {
-	
+	//ServerInformationPanel loginPanel = (ServerInformationPanel)container.getComponent(0);
+  //cardLayout.show(container, "2");
+	ServerInformation serverInfo = new ServerInformation(server);
+	log.setText("");
+	log.setText("Server IP: " + serverInfo.getServerIP() + "\nServer Name: " + serverInfo.getServerName() +  "\nServer Port: " + serverInfo.getPortNumber() + "\nServer Status: " + connection.getText());
 }
 
 public static void main(String[] args) {

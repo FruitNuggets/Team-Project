@@ -88,7 +88,7 @@ public class Server extends AbstractServer
       try
 			{
 				ArrayList<String> result = database.query("Select username, aes_decrypt(password, 'key') from UserData where UserData.username = '" + loginData.getUsername() + "'");
-				if(result != null)
+				if(result != null || !result.isEmpty())
 				{
 					boolean correct = false;
 					for(String res : result)

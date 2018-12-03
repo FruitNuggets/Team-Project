@@ -2,6 +2,7 @@ package TetrisServer;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.net.UnknownHostException;
 
 public class EventHandler implements ActionListener
 {
@@ -57,7 +58,14 @@ public void actionPerformed(ActionEvent event)
   }
   else if(event.getActionCommand().equals("Server Information"))
   {
-  	
+  	try
+		{
+			gui2.showServerInformation();
+		} catch (UnknownHostException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
   }
   else if(event.getActionCommand().equals("Player Information"))
   {
