@@ -12,6 +12,12 @@ import view.OnlinePanel;
 
 import java.awt.*;
 import java.io.IOException;
+import java.net.Inet6Address;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
+import java.util.ArrayList;
+import java.util.Enumeration;
 
 public class ClientGUI extends JFrame
 {
@@ -135,6 +141,7 @@ public class ClientGUI extends JFrame
 			GameController.localController.gameStart();
 			break;
 		case 1:
+			JOptionPane.showMessageDialog(this, "IP Address: " + getServer().toString());
 			String port=JOptionPane.showInputDialog("Please enter the room number:");
 			Server.Init(Integer.parseInt(port));
 			System.out.println("Connect Success");
@@ -152,8 +159,9 @@ public class ClientGUI extends JFrame
 			GameController.localController.gameStart();
 			break;
 		case 2:
+			String address = JOptionPane.showInputDialog("Please enter the IP Address for the room: ");
 			String port2=JOptionPane.showInputDialog("Please enter the room number:");
-			Client.Init(Integer.parseInt(port2), getAddress());
+			Client.Init(Integer.parseInt(port2), address);
 			System.out.println("Connect success");
 
 			OnlinePanel onlinePanel2=new OnlinePanel();
@@ -190,5 +198,33 @@ public class ClientGUI extends JFrame
 	public String getAddress()
 	{
 		return this.address;
+	}
+	
+	public ArrayList<String> getServer()
+	{
+		ArrayList<String>ip = new ArrayList<String>();
+		try {
+			   Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
+			   while (interfaces.hasMoreElements()) {
+			       NetworkInterface iface = interfaces.nextElement();
+			       // filters out 127.0.0.1 and inactive interfaces
+			       if (iface.isLoopback() || !iface.isUp())
+			           continue;
+
+			       Enumeration<InetAddress> addresses = iface.getInetAddresses();
+			       while(addresses.hasMoreElements()) {
+			           InetAddress addr = addresses.nextElement();
+
+			            // *EDIT*
+			           if (addr instanceof Inet6Address) continue;
+
+			           ip.add(addr.getHostAddress());
+			           System.out.println(iface.getDisplayName() + " " + ip);
+			       }
+			   }
+		} catch (SocketException e) {
+		    throw new RuntimeException(e);
+		}
+		return ip;
 	}
 }
