@@ -64,4 +64,9 @@ public class Database
     stmt.execute(dml);
   }
   
+  public Connection getConnection()
+  {
+    return conn;
+  }
+  
 }

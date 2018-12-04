@@ -302,6 +302,10 @@ public void showPlayerInformation()
 		log.append("\n\n");
 	}
 }
+public Server getServer()
+{
+	return this.server;
+}
 
 public static void main(String[] args) {
   
