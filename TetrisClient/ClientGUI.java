@@ -147,8 +147,8 @@ public class ClientGUI extends JFrame
 			System.out.println("Connect Success");
 			
 			OnlinePanel onlinePanel=new OnlinePanel();
-			GameController.localController=new GameController(Server.getExchangeThread(),onlinePanel, client, this);
-			RemoteController.remoteController=new RemoteController(onlinePanel, this);
+			GameController.localController=new GameController(Server.getExchangeThread(),onlinePanel, client);
+			RemoteController.remoteController=new RemoteController(onlinePanel);
 			onlinePanel.setLocalController(GameController.localController);
 			onlinePanel.setRemoteController(RemoteController.remoteController);
 			this.setContentPane(onlinePanel);
@@ -165,8 +165,8 @@ public class ClientGUI extends JFrame
 			System.out.println("Connect success");
 
 			OnlinePanel onlinePanel2=new OnlinePanel();
-			GameController.localController=new GameController(Client.getExchangeThread(),onlinePanel2, client, this);
-			RemoteController.remoteController=new RemoteController(onlinePanel2, this);
+			GameController.localController=new GameController(Client.getExchangeThread(),onlinePanel2, client);
+			RemoteController.remoteController=new RemoteController(onlinePanel2);
 			onlinePanel2.setLocalController(GameController.localController);
 			onlinePanel2.setRemoteController(RemoteController.remoteController);
 			this.setContentPane(onlinePanel2);
