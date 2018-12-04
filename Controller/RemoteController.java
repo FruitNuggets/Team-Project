@@ -80,12 +80,15 @@ public class RemoteController  {
         if(myScore<remoteScore){
             // WIN
             JOptionPane.showMessageDialog(panel, str + "You win");
+            GameController.localController.gameStart();
         }else if(myScore>remoteScore){
             // LOSE
             JOptionPane.showMessageDialog(panel,str+"Otherside win");
+            GameController.localController.gameStart();
         }else{
             // draw
             JOptionPane.showMessageDialog(panel,str+"draw");
+            GameController.localController.gameStart();
         }
     }
 
