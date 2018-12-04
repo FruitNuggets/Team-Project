@@ -4,7 +4,11 @@ import entity.Rect;
 import model.GameDao;
 import view.OnlinePanel;
 
+import java.io.IOException;
+
 import javax.swing.*;
+
+import TetrisClient.ClientGUI;
 
 
 public class RemoteController  {
@@ -13,6 +17,7 @@ public class RemoteController  {
 
     private OnlinePanel panel;
     private GameDao gameDao=new GameDao();
+    private ClientGUI clientGUI;
 
     public GameDao getGameDao() {
         return gameDao;
@@ -37,10 +42,11 @@ public class RemoteController  {
         return nextRect;
     }
 
-    public RemoteController(OnlinePanel panel) {
+    public RemoteController(OnlinePanel panel, ClientGUI clientGUI) {
         this.panel=panel;
         curRect =new Rect(1);
         nextRect =new Rect(2);
+        this.clientGUI = clientGUI;
     }
 
     // Rect control
@@ -80,15 +86,36 @@ public class RemoteController  {
         if(myScore<remoteScore){
             // WIN
             JOptionPane.showMessageDialog(panel, str + "You win");
-            GameController.localController.gameStart();
+						try
+						{
+							clientGUI.correctLogin();
+						} catch (IOException e)
+						{
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
         }else if(myScore>remoteScore){
             // LOSE
             JOptionPane.showMessageDialog(panel,str+"Otherside win");
-            GameController.localController.gameStart();
+						try
+						{
+							clientGUI.correctLogin();
+						} catch (IOException e)
+						{
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
         }else{
             // draw
             JOptionPane.showMessageDialog(panel,str+"draw");
-            GameController.localController.gameStart();
+						try
+						{
+							clientGUI.correctLogin();
+						} catch (IOException e)
+						{
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
         }
     }
 

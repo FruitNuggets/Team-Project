@@ -2,11 +2,14 @@ package Controller;
 
 import MySocket.ExchangeThread;
 import TetrisClient.Client;
+import TetrisClient.ClientGUI;
 import entity.Rect;
 import model.GameDao;
 import view.OfflinePanel;
 import view.OnlinePanel;
 import javax.swing.*;
+
+import java.io.IOException;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -20,6 +23,7 @@ public class GameController {
 	// time controller
 	private Timer timer;
 	private Client client;
+	private ClientGUI clientGUI;
 
 	private boolean isRunning =false;
 
@@ -70,15 +74,36 @@ public class GameController {
 								// WIN
 								JOptionPane.showMessageDialog(panel, str + "You win");
 								client.addWin();
-								gameStart();
+								try
+								{
+									clientGUI.correctLogin();
+								} catch (IOException e)
+								{
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
 							} else if (myScore < remoteScore) {
 								// LOSE
 								JOptionPane.showMessageDialog(panel, str + "Otherside win");
-								gameStart();
+								try
+								{
+									clientGUI.correctLogin();
+								} catch (IOException e)
+								{
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
 							} else {
 								// pingju
 								JOptionPane.showMessageDialog(panel, str + "Draw");
-								gameStart();
+								try
+								{
+									clientGUI.correctLogin();
+								} catch (IOException e)
+								{
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
 							}
 						}else{
 							int myScore = gamedao.score;
@@ -123,10 +148,11 @@ public class GameController {
 		this.panel=(OfflinePanel)panel;
 	}
 
-	public GameController(ExchangeThread thread,OnlinePanel panel, Client client) {
+	public GameController(ExchangeThread thread,OnlinePanel panel, Client client, ClientGUI clientGUI) {
 		this.exchangeThread=thread;
 		this.panel=(OnlinePanel)panel;
 		this.client = client;
+		this.clientGUI = clientGUI;
 
 	}
 
