@@ -70,12 +70,15 @@ public class GameController {
 								// WIN
 								JOptionPane.showMessageDialog(panel, str + "You win");
 								client.addWin();
+								gameStart();
 							} else if (myScore < remoteScore) {
 								// LOSE
 								JOptionPane.showMessageDialog(panel, str + "Otherside win");
+								gameStart();
 							} else {
 								// pingju
 								JOptionPane.showMessageDialog(panel, str + "Draw");
+								gameStart();
 							}
 						}else{
 							int myScore = gamedao.score;
