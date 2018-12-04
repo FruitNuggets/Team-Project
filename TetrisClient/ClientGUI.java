@@ -1,23 +1,36 @@
 package TetrisClient;
 
 import javax.swing.*;
+
+import Controller.GameController;
+import Controller.KeyController;
+import Controller.RemoteController;
+import TetrisServer.Server;
+import view.LauncherJPanel;
+import view.OfflinePanel;
+import view.OnlinePanel;
+
 import java.awt.*;
 import java.io.IOException;
 
 public class ClientGUI extends JFrame
 {
  
+
+	private String[] title={"Tetris Single Mode","Tetris Online Mode"};
+	private int[] size={450,750};
   private Client client;
   private InitialControl initialC;
   private LoginControl loginC;
   private CreateAccountControl accountC;
-  private ClientInitialGameControl initialGameC;
   private JPanel initialP;
   private JPanel loginP;
   private CreateAccountPanel accountP;
-  private ClientInitialGamePanel initialGameP;
   private JPanel container;
   private CardLayout cardLayout;
+  private LauncherJPanel gamePanel;
+  private String address;
+  private int port;
   // Constructor that creates the client GUI.
   public ClientGUI() throws IOException
   {
@@ -48,9 +61,22 @@ public class ClientGUI extends JFrame
     this.setVisible(true);
   }
   
-  public void correctLogin()
+  public void correctLogin() throws IOException
   {
+  	this.client.setUsername(loginC.getUsername());
   	cardLayout.show(container, "4");
+  }
+  
+  public void startServer() throws InterruptedException
+  {
+  	try
+		{
+			client.sendToServer("Start");
+		} catch (IOException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
   }
   
   public void correctAccount()
@@ -83,14 +109,86 @@ public class ClientGUI extends JFrame
   {
 	    loginC = new LoginControl(container, client); //Probably will want to pass in ChatClient here
 	    accountC = new CreateAccountControl(container, client);
-	    initialGameC = new ClientInitialGameControl(container, client);
+	    gamePanel = new LauncherJPanel(this);
+	    
 	    // Create the four views. (need the controller to register with the Panels
 	    loginP = new LoginPanel(loginC);
 	    accountP = new CreateAccountPanel(accountC);
-	    initialGameP = new ClientInitialGamePanel(initialGameC);
 	    
 	    container.add(loginP, "2");
 	    container.add(accountP, "3");
-	    container.add(initialGameP, "4");
+	    container.add(gamePanel, "4");
   }
+  
+  public void chooseMode(int mode){
+		System.out.println("mode"+mode);
+		switch (mode){
+		case 0:
+			OfflinePanel offlinePanel=new OfflinePanel();
+			GameController.localController=new GameController(offlinePanel);
+			offlinePanel.setLocalController(GameController.localController);
+			this.setContentPane(offlinePanel);
+			this.addKeyListener(new KeyController(GameController.localController));
+			// renew
+			this.setTitle(title[0]);
+			this.setSize(size[0],470);
+			GameController.localController.gameStart();
+			break;
+		case 1:
+			String port=JOptionPane.showInputDialog("Please enter the room number:");
+			Server.Init(Integer.parseInt(port));
+			System.out.println("Connect Success");
+			
+			OnlinePanel onlinePanel=new OnlinePanel();
+			GameController.localController=new GameController(Server.getExchangeThread(),onlinePanel, client);
+			RemoteController.remoteController=new RemoteController(onlinePanel);
+			onlinePanel.setLocalController(GameController.localController);
+			onlinePanel.setRemoteController(RemoteController.remoteController);
+			this.setContentPane(onlinePanel);
+			this.addKeyListener(new KeyController(GameController.localController));
+			// renew
+			this.setTitle(title[1]);
+			this.setSize(size[1],470);
+			GameController.localController.gameStart();
+			break;
+		case 2:
+			String port2=JOptionPane.showInputDialog("Please enter the room number:");
+			Client.Init(Integer.parseInt(port2), getAddress());
+			System.out.println("Connect success");
+
+			OnlinePanel onlinePanel2=new OnlinePanel();
+			GameController.localController=new GameController(Client.getExchangeThread(),onlinePanel2, client);
+			RemoteController.remoteController=new RemoteController(onlinePanel2);
+			onlinePanel2.setLocalController(GameController.localController);
+			onlinePanel2.setRemoteController(RemoteController.remoteController);
+			this.setContentPane(onlinePanel2);
+			this.addKeyListener(new KeyController(GameController.localController));
+			// renew
+			this.setTitle(title[1]);
+			this.setSize(size[1],470);
+			GameController.localController.gameStart();
+			break;
+		}
+		requestFocus();
+	}
+
+	public void setAddress(String address) 
+	{
+		this.address = address;
+	}
+	
+	public void setPort(int i)
+	{
+		this.port = i;
+	}
+	
+	public int getPort()
+	{
+		return this.port;
+	}
+	
+	public String getAddress()
+	{
+		return this.address;
+	}
 }

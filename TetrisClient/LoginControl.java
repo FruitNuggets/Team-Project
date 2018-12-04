@@ -13,6 +13,7 @@ public class LoginControl implements ActionListener
   // Private data fields for the container and chat client.
   private JPanel container;
   private Client client;
+  private String username;
   
   // Constructor for the login controller.
   public LoginControl(JPanel container, Client client)
@@ -50,6 +51,7 @@ public class LoginControl implements ActionListener
       }
       else
       {
+      	this.username = data.getUsername();
       	try
 				{
 					client.sendToServer(data);
@@ -69,5 +71,10 @@ public class LoginControl implements ActionListener
     LoginPanel loginPanel = (LoginPanel)container.getComponent(1);
     loginPanel.setError(error);
     
+  }
+  
+  public String getUsername()
+  {
+  	return this.username;
   }
 }

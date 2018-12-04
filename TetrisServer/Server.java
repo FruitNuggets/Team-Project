@@ -2,9 +2,13 @@ package TetrisServer;
 
 import java.awt.Color;
 import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.sql.*;
 import java.util.ArrayList;
 import javax.swing.*;
+
+import MySocket.ExchangeThread;
 import ocsf.server.*;
 import TetrisLogin.*;
 
@@ -16,6 +20,7 @@ public class Server extends AbstractServer
   private Database database;
   private int clients;
   private ArrayList<String> currentClients;
+  private static ExchangeThread serverExchangeThread;
   
 	public Server(int port)
 	{
@@ -135,6 +140,24 @@ public class Server extends AbstractServer
 			  log.append(e.toString());
 			}
     }
+    else if(arg0 instanceof String)
+    {
+    	if(arg0.toString().trim().contains("I won"))
+    	{
+    		String[] tokens = arg0.toString().trim().split(",");
+    		if(tokens[1] != null)
+    		{
+    			try
+					{
+						database.executeDML("Update PlayerInformation SET wins = wins+1 where username = '" + tokens[1] + "'");
+					} catch (SQLException e)
+					{
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+    		}
+    	}
+    }
 
     // TODO Auto-generated method stub
     log.append("\nMessage from Client" + arg0.toString() + arg1.toString() + "\n");
@@ -164,6 +187,23 @@ public class Server extends AbstractServer
   public JLabel getStatus()
   {
     return status;
+  }
+
+  
+  public static void Init(int PORT){
+    try {
+        ServerSocket ss = new ServerSocket(PORT);
+        System.out.println("Port"+PORT+",Server start");
+        Socket s = ss.accept();
+        // start the server
+        serverExchangeThread=new ExchangeThread(s);
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+  }
+
+  public static ExchangeThread getExchangeThread(){
+    return serverExchangeThread;
   }
 
   

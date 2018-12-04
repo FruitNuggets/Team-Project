@@ -1,10 +1,17 @@
 package TetrisClient;
 
+import java.io.IOException;
+import java.net.Socket;
+
+import MySocket.ExchangeThread;
 import ocsf.client.AbstractClient;
 
 public class Client extends AbstractClient
 {
 	private ClientGUI gui;
+  private static ExchangeThread clientExchangeThread;
+  private static Socket socket;
+  private String username;
   
   public Client(ClientGUI gui)
   {
@@ -23,7 +30,14 @@ public class Client extends AbstractClient
   {
   	if(arg0.toString().equals("correct login"))
   	{
-  		gui.correctLogin();
+  		try
+			{
+				gui.correctLogin();
+			} catch (IOException e)
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
   	}
   	else if(arg0.toString().equals("username okay"))
   	{
@@ -50,5 +64,41 @@ public class Client extends AbstractClient
   {
     //Add your code here
   	System.out.println("Connected to the server");
+  }
+
+  public static void Init(int PORT, String host){
+      try {
+          socket = new Socket(host,PORT);
+          System.out.println("IP:"+socket.getLocalAddress()+"port"+socket.getPort());
+
+          clientExchangeThread=new ExchangeThread(socket);
+      } catch (IOException e) {
+          e.printStackTrace();
+      }
+  }
+  
+  public Socket getSocket()
+  {
+  	return this.socket;
+  }
+  
+  public static ExchangeThread getExchangeThread(){
+      return clientExchangeThread;
+  }
+  
+  public void addWin()
+  {
+  	try
+		{
+			this.sendToServer("I won, " + this.username);
+		} catch (IOException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+  }
+  public void setUsername(String username)
+  {
+  	this.username = username;
   }
 }

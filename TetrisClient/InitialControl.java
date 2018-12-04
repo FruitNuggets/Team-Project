@@ -32,14 +32,16 @@ public class InitialControl implements ActionListener
     	if (initialPanel.checkInfo())
     	{
     	    client = new Client(initialPanel.getAddress(), initialPanel.getPort(), clientGUI);
-    	    try
-    			{
-    				client.openConnection();
-    			} catch (IOException e)
-    			{
-    				// TODO Auto-generated catch block
-    				System.out.println(e.toString());
-    			}
+    	    clientGUI.setAddress(initialPanel.getAddress());
+    	    clientGUI.setPort(initialPanel.getPort());
+    		  try
+					{
+						client.openConnection();
+					} catch (IOException e)
+					{
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
     	    clientGUI.setClient(client);
     	    clientGUI.addtoContainer();
     	   LoginPanel loginPanel = (LoginPanel)container.getComponent(1);
