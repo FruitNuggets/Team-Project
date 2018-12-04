@@ -37,7 +37,6 @@ private Database database;
 private Process pr;
 private Runtime rt;
 private JPanel container;
-private ServerGamePanel gamePanel;
 private CardLayout cardLayout;
 
 
